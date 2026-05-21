@@ -1,12 +1,24 @@
 import PropTypes from 'prop-types';
 
-// PASO: Completar el componente SkillBadge
-// Debe recibir un string "nombre" por props y mostrar un badge Bootstrap
 const SkillBadge = ({ nombre }) => {
+  const getBadgeColor = (skill) => {
+    const categorias = {
+      frontend: ["JavaScript", "React", "React Native", "HTML", "CSS", "Bootstrap", "Tailwind CSS"],
+      backend: [".NET", "C#", "APIs REST", "Testing"],
+      database: ["SQL Server"],
+      tools: ["Postman", "Git"]
+    };
+
+    if (categorias.frontend.includes(skill)) return "bg-primary";
+    if (categorias.backend.includes(skill)) return "bg-success";
+    if (categorias.database.includes(skill)) return "bg-info";
+    if (categorias.tools.includes(skill)) return "bg-warning";
+    return "bg-secondary";
+  };
+
   return (
-    // PASO: Usar un badge de Bootstrap con className dinámico si querés colores por categoría
-    <span className="badge bg-primary me-1">
-      { nombre }
+    <span className={`badge ${getBadgeColor(nombre)} me-1 mb-1`}>
+      {nombre}
     </span>
   );
 };

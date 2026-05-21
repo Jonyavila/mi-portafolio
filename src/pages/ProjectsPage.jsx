@@ -1,42 +1,105 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import ProjectCard from '../components/ProjectCard';
 import proyectosData from '../data/proyectos.json';
 
 const ProjectsPage = () => {
-  // PASO 1: Crear estado para guardar los proyectos
-  // const [proyectos, setProyectos] = useState([]);
+  const [proyectos, setProyectos] = useState([]);
+  const [cargando, setCargando] = useState(true);
 
-  // PASO 2: Crear estados de carga y error (igual que en FetchPage)
-  // const [cargando, setCargando] = useState(true);
-  // const [error, setError] = useState(null);
+  useEffect(() => {
+    
+    setTimeout(() => {
+      setProyectos(proyectosData);
+      setCargando(false);
+    }, 300);
+  }, []);
 
-  // PASO 3: Usar useEffect para cargar los datos
-  // OPCIÓN A: Cargar desde el archivo JSON importado (ya está disponible en proyectosData)
-  // OPCIÓN B: Fetch desde una API pública (ej: GitHub API para tus repos)
-  // useEffect(() => {
-  //   setProyectos(proyectosData);
-  //   setCargando(false);
-  // }, []);
+  if (cargando) {
+    return (
+      <div style={{minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+    );
+  }
 
-  // PASO 4: Renderizado condicional - mostrar spinner si está cargando, mensaje si hay error
-  // if (cargando) return <div className="text-center">Cargando...</div>;
-  // if (error) return <div className="alert alert-danger">{error}</div>;
+  // Verificar si hay 
+  const hayProyectos = proyectos && proyectos.length > 0 && proyectos[0].id !== undefined;
 
   return (
-    <div>
-      <h2 className="mb-4">Mis Proyectos</h2>
+    <div style={{minHeight: '100vh', padding: '2rem 1rem' }}>
+      <div className="container">
+        <h2 className="mb-4 text-center" style={{
+          fontSize: '2rem',
+          color: '#000000',
+          fontWeight: '600'
+        }}>
+          Mis Proyectos
+          <div style={{
+            width: '80px',
+            height: '4px',
+            background: '#3b82f6',
+            margin: '0.5rem auto 0',
+            borderRadius: '2px'
+          }} />
+        </h2>
 
-      {/* PASO 5: Mapear los proyectos con .map() y renderizar ProjectCard */}
-      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {/* PASO: proyectos.map(proyecto => (
-          <div className="col" key={proyecto.id}>
-            <ProjectCard proyecto={proyecto} />
+        {hayProyectos ? (
+          <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {proyectos.map(proyecto => (
+              <div className="col" key={proyecto.id}>
+                <ProjectCard proyecto={proyecto} />
+              </div>
+            ))}
           </div>
-        )) */}
+        ) : (
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '50vh'
+          }}>
+            <div style={{
+              textAlign: 'center',
+              maxWidth: '450px',
+              padding: '2rem'
+            }}>
+              <div style={{ fontSize: '5rem', marginBottom: '1rem' }}>🚧</div>
+              <h3 style={{ fontSize: '1.5rem', color: '#000', marginBottom: '0.5rem' }}>
+                Próximamente
+              </h3>
+              <p style={{ color: '#64748b' }}>
+                Estoy trabajando en proyectos increíbles para mostrarte. 
+                ¡Vuelve pronto!
+              </p>
+              <div style={{
+                width: '100px',
+                height: '4px',
+                background: '#e2e8f0',
+                margin: '1rem auto',
+                borderRadius: '2px'
+              }}>
+                <div style={{
+                  width: '60%',
+                  height: '100%',
+                  background: '#3b82f6',
+                  borderRadius: '2px',
+                  animation: 'progress 2s ease-in-out infinite'
+                }} />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* PASO OPCIONAL: Agregar filtrado por tecnología con useState */}
-      {/* PASO OPCIONAL: Fetch a la API de GitHub para mostrar tus repos reales */}
+      <style>{`
+        @keyframes progress {
+          0% { width: 30%; }
+          50% { width: 80%; }
+          100% { width: 30%; }
+        }
+      `}</style>
     </div>
   );
 };
